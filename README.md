@@ -266,7 +266,7 @@ git push -u origin feature/wiki-grafana
 
 ### 2.9 Pull auf Lokaler Main
 ```bash
-git switch main
+git switch main 
 git pull --ff-only origin main
 ```
 
