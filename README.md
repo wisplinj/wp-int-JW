@@ -240,17 +240,34 @@ docker compose up -d
 docker ps
 ```
 
-## 2.5. Vor den Commit auf neuen Feature Branch wechseln:
-```bash
-git switch -c feature/wiki-grafana
-```
-
 ## 2.6. Funktionstest
 - Load/Refresh Test
 - Anmeldung testen
 - Logs überprüfen mit 
 ```bash 
 docker logs <container-name> --tail 30
+```
+
+## 2.7. Branch, Commit und Push
+```bash 
+git switch -c feature/wiki-grafana
+git add .
+git commit -m "Erweiterung der Docker-Umgebung: Wiki.js + Grafana hinzugefügt, README aktualisiert"
+git push -u origin feature/wiki-grafana
+```
+
+### 2.8 Pull Request auf GitHub erstellen
+- Dein Repo auf GitHub öffnen
+- GitHub zeigt automatisch: "Compare & pull request" -> Darauf klicken
+- Ziel: Base: Main - Compare: feature/wiki-grafana
+- Konflikte mit "Accept current change" lösen
+- Beschreibung kurz ausfüllen
+- Pull Request erstellen
+
+### 2.9 Pull auf Lokaler Main
+```bash
+git switch main
+git pull --ff-only origin main
 ```
 
 ---
