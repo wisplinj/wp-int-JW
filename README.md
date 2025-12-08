@@ -282,8 +282,11 @@ git pull --ff-only origin main
 
 ### Wiki.js
 → http://localhost:3002
+<img width="1920" height="929" alt="image" src="https://github.com/user-attachments/assets/4079b624-25b9-4f93-ab86-ef5ba99173e2" />
 
 ### Grafana
 → http://localhost:3003
+<img width="1920" height="929" alt="image" src="https://github.com/user-attachments/assets/7b9c1391-5419-4aa7-b5f0-bcc0031f9e19" />
+
 
 ---
