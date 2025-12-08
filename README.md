@@ -1,12 +1,10 @@
-# WordPress Docker Umgebung – Schritt-für-Schritt Anleitung
+# 1. WordPress Docker Umgebung – Schritt-für-Schritt Anleitung
 
 ---
 
-## 1. Repository auf GitHub anlegen
+## 1.1. Repository auf GitHub anlegen
 
----
-
-## 2. Repo klonen
+## 1.2. Repo klonen
 
 ```bash
 cd /c/Users/deinName/Documents/Git_Repository   # oder dein Projekt-Ordner
@@ -14,9 +12,7 @@ git clone https://github.com/DEINUSERNAME/wp-int-JW.git
 cd wp-int-JW
 ```
 
----
-
-## 3. Verzeichnisstruktur anlegen
+## 1.3. Verzeichnisstruktur anlegen
 
 ### Basis-Dateien
 
@@ -37,9 +33,7 @@ mkdir -p wordpress/themes
 mkdir -p wordpress/uploads
 ```
 
----
-
-## 4. .gitkeep in leere Ordner legen
+## 1.4. .gitkeep in leere Ordner legen
 
 ```bash
 touch wordpress/.gitkeep
@@ -49,18 +43,14 @@ touch wordpress/themes/.gitkeep
 touch wordpress/uploads/.gitkeep
 ```
 
----
-
-## 5. Prüfen
+## 1.5. Prüfen
 
 ```bash
 ls -a
 ls wordpress
 ```
 
----
-
-## 6. Ersten Commit machen
+## 1.6. Ersten Commit machen
 
 ```bash
 git status          # nur zum Schauen
@@ -68,17 +58,13 @@ git add .
 git commit -m "Initiale Projektstruktur für WordPress-Docker-Umgebung"
 ```
 
----
-
-## 7. Alles auf GitHub pushen
+## 1.7. Alles auf GitHub pushen
 
 ```bash
 git push -u origin main
 ```
 
----
-
-## 8. .env.example vorbereiten
+## 1.8. .env.example vorbereiten
 
 ```
 DB_NAME=wordpress
@@ -90,17 +76,13 @@ PMA_USER=wp_user
 PMA_PASSWORD=********
 ```
 
----
-
-## 9. Lokale .env anlegen
+## 1.9. Lokale .env anlegen
 
 ```bash
 cp .env.example .env
 ```
 
----
-
-## 10. .gitignore anpassen
+## 1.10. .gitignore anpassen
 
 ```
 .env
@@ -108,9 +90,7 @@ wordpress/uploads/*
 wordpress/uploads/
 ```
 
----
-
-## 11. docker-compose.yml schreiben
+## 1.11. docker-compose.yml schreiben
 
 ```yaml
 version: "3.9"
@@ -167,9 +147,7 @@ volumes:
   db_data:
 ```
 
----
-
-## 12. Umgebung starten & testen
+## 1.12. Umgebung starten & testen
 
 ```bash
 docker compose up -d
@@ -181,9 +159,7 @@ Browser öffnen:
 - http://localhost:8080  
 - http://localhost:8081  
 
----
-
-## 13. Git-Workflow (Feature Branch anlegen)
+## 1.13. Git-Workflow (Feature Branch anlegen)
 
 ```bash
 git switch -c feature/wp-setup
@@ -194,19 +170,15 @@ git commit -m "WordPress Stack mit MariaDB und phpMyAdmin hinzugefügt"
 git push -u origin feature/wp-setup
 ```
 
----
-
-## 14. Pull Request auf GitHub
+## 1.14. Pull Request auf GitHub
 
 - Dein Repo auf GitHub öffnen  
 - GitHub zeigt meist einen Button: **„Compare & pull request“** → klicken  
 - Base: `main`, Compare: `feature/wp-setup`  
 - Titel & Beschreibung kurz ausfüllen  
-- **Create pull request**  
+- **Create pull request**
 
----
-
-## 15. PR mergen
+## 1.15. PR mergen
 
 Wenn alles gut ist:
 
@@ -218,5 +190,83 @@ Danach lokal:
 git switch main
 git pull --ff-only origin main
 ```
+
+---
+
+# 2. Erweiterung eurer WordPress-Docker-Umgebung
+
+---
+
+## 2.1 docker-compose.yml um folgendes ergänzen:
+```bash
+  wiki:
+    image: ghcr.io/requarks/wiki:2
+    container_name: wp-wiki
+    restart: unless-stopped
+    environment:
+      DB_TYPE: sqlite
+      DB_FILEPATH: /wiki/data/wiki.db
+    volumes:
+      - wiki_data:/wiki/data
+    ports:
+      - "3002:3000"
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: wp-grafana
+    restart: unless-stopped
+    ports:
+      - "3003:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+	  
+volumes:
+  wiki_data:
+  grafana_data:
+```
+
+## 2.2. Sicherstellen das alle Container ausgeschaltet sind:
+```bash
+docker compose down
+```
+
+## 2.3. Docker initialisieren:
+```bash
+docker compose up -d
+```
+
+## 2.4. Docker Status prüfen:
+```bash
+docker ps
+```
+
+## 2.5. Vor den Commit auf neuen Feature Branch wechseln:
+```bash
+git switch -c feature/wiki-grafana
+```
+
+## 2.6. Funktionstest
+- Load/Refresh Test
+- Anmeldung testen
+- Logs überprüfen mit 
+```bash 
+docker logs <container-name> --tail 30
+```
+
+---
+
+# Zugriff
+
+### WordPress
+→ http://localhost:8080
+
+### phpMyAdmin
+→ http://localhost:8081
+
+### Wiki.js
+→ http://localhost:3002
+
+### Grafana
+→ http://localhost:3003
 
 ---

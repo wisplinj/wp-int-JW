@@ -48,5 +48,28 @@ services:
       PMA_USER: ${PMA_USER}
       PMA_PASSWORD: ${PMA_PASSWORD}
 
+  wiki:
+    image: ghcr.io/requarks/wiki:2
+    container_name: wp-wiki
+    restart: unless-stopped
+    environment:
+      DB_TYPE: sqlite
+      DB_FILEPATH: /wiki/data/wiki.db
+    volumes:
+      - wiki_data:/wiki/data
+    ports:
+      - "3002:3000"
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: wp-grafana
+    restart: unless-stopped
+    ports:
+      - "3003:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+
 volumes:
   db_data:
+  wiki_data:
+  grafana_data:
